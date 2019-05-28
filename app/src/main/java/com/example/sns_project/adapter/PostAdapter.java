@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -20,6 +21,10 @@ import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
 import com.example.sns_project.activity.PostActivity;
 import com.example.sns_project.listener.OnPostListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +36,8 @@ import static com.example.sns_project.Util.isStorageUrl;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostInfo> mDataset;
     private Activity activity;
-
+    private StorageReference storageReference;
+    private FirebaseFirestore firebaseFirestore;
     private OnPostListener onPostListener;
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
@@ -77,6 +83,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
         CardView cardView = holder.cardView;
+        firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
+        DocumentReference docRef = firebaseFirestore.collection("users").document(mDataset.get(position).getPublisher());
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    TextView publisher =  cardView.findViewById(R.id.tv_post_user);
+                    publisher.setText(document.getData().get("name").toString());
+                } else {
+                    Log.d("abcd", "No such document");
+                }
+            } else {
+                Log.d("abcd", "get failed with ", task.getException());
+            }
+        });
+
         //제목 가져오기
         TextView titleTextView = cardView.findViewById(R.id.tv_title);
         titleTextView.setText(mDataset.get(position).getTitle());
@@ -92,7 +114,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             contentsLayout.setTag(contentsList);
             contentsLayout.removeAllViews();
 
-            //TODO 더보기 오류 수정(다른것이 뜸)
             final int MORE_CONTENTS = 5; //더보기 개수 제한 설정
             //동적 화면 구성
             for (int i = 0; i < contentsList.size(); i++){

@@ -178,6 +178,10 @@ public class HomeFragment extends Fragment {
         //위치 관리자 객체 참조
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
+        final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+
+
+
         /* @@@@@@@@@@@@ 앱 실행시 받아오는 gps추천정보 @@@@@@@@@@*/
         //가장 최근 위치정보 & api받아오기
         if (Build.VERSION.SDK_INT >= 23 &&
@@ -201,7 +205,7 @@ public class HomeFragment extends Fragment {
         }
 
         //내 주변 광광지 api받아오기
-        Thread mThread = new Thread() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -241,14 +245,12 @@ public class HomeFragment extends Fragment {
                         gpsttl2.setText(tourListTitle.get(1));
                         gpsttl3.setText(tourListTitle.get(2));
                         gpsttl4.setText(tourListTitle.get(3));
-                        update1.setClickable(true);
 
                     }
                 });
 
             }
-        };
-        mThread.start();
+        }).start();
 
         /* @@@@@@@@@@@@ 앱 실행시 받아오는 행사공연축제 추천정보 @@@@@@@@@@*/
         //오늘 날짜 가져오기
@@ -258,7 +260,7 @@ public class HomeFragment extends Fragment {
         Log.d("date", dateToday);
 
 
-        Thread nThread = new Thread() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -297,14 +299,12 @@ public class HomeFragment extends Fragment {
                         festttl2.setText(tourListTitle2.get(1));
                         festttl3.setText(tourListTitle2.get(2));
                         festttl4.setText(tourListTitle2.get(3));
-                        update2.setClickable(true);
 
                     }
                 });
 
             }
-        };
-        nThread.start();
+        }).start();
 
         /* @@@@@@@@@@@@ 행사공연축제 업데이트 버튼 누를 시 받아오는 추천정보 @@@@@@@@@@*/
         update2.setOnClickListener(new View.OnClickListener() {
