@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.sns_project.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,7 +66,7 @@ public class SignUpActivity extends BasicActivity {
         String password_check = ((EditText) findViewById(R.id.et_password_check)).getText().toString(); //EditText에서 Password값 String으로 가져옴
 
         if (emailStr.length() > 0) { //이메일과 비밀번호를 입력한 경우
-            if (passwordStr.length() > 0) {
+            if (passwordStr.length() > 5) {
                 if (passwordStr.equals(password_check)) { //비밀번호와 비밀번호 확인이 일치할 경우
                     if (signupCheck.isChecked()) {
                         final RelativeLayout loaderLayout = findViewById(R.id.loaderLayout);
@@ -81,7 +82,7 @@ public class SignUpActivity extends BasicActivity {
                                     } else {
                                         // 실패 했을 경우 UI
                                         if (task.getException() != null) {
-                                            showToast(SignUpActivity.this, task.getException().toString());
+                                            Toast.makeText(SignUpActivity.this, "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -94,7 +95,7 @@ public class SignUpActivity extends BasicActivity {
                     password.requestFocus(); //패스워드 입력칸에 포커스 두기
                 }
             } else {
-                showToast(SignUpActivity.this, "비밀번호를 입력해주세요");
+                showToast(SignUpActivity.this, "비밀번호를 6자리 이상으로 입력해주세요");
                 password.requestFocus(); //패스워드 입력칸에 포커스 두기
             }
         } else { //이메일과 비밀번호가 입력되지 않은 경우

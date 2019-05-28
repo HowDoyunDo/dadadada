@@ -83,12 +83,14 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
+                image_profile.setImageResource(R.mipmap.ic_launcher);
+                /*
                 if (user.getImageURL().equals("defalut")){
                     image_profile.setImageResource(R.mipmap.ic_launcher);
                 } else {
-                    Glide.with(getContext()).load(user.getImageURL()).centerCrop().into(image_profile);
-
+                    Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
                 }
+                */
             }
 
             @Override
@@ -151,10 +153,10 @@ public class ProfileFragment extends Fragment {
                     db.collection("users").document(fuser.getUid()).set(memberInfo)
                             .addOnSuccessListener(aVoid ->{
                                 //Toast.makeText(getContext(), "프로필 사진을 수정했습니다.", Toast.LENGTH_SHORT).show();
-                                    })
+                            })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(getContext(), "프로필 사진을 수정 실패.", Toast.LENGTH_SHORT).show();
-                                    });
+                            });
 
                     pd.dismiss();
                 } else {
@@ -187,4 +189,3 @@ public class ProfileFragment extends Fragment {
     }
 
 }
-

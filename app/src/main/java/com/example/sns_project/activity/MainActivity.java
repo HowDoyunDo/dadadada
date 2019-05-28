@@ -3,41 +3,27 @@ package com.example.sns_project.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import com.example.sns_project.fragment.ChatFragment;
+import com.example.sns_project.fragment.ChatsFragment;
 import com.example.sns_project.fragment.HomeFragment;
 import com.example.sns_project.fragment.ProfileFragment;
-import com.example.sns_project.fragment.UsersFragment;
-import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
-import com.example.sns_project.adapter.PostAdapter;
-import com.example.sns_project.listener.OnPostListener;
+import com.example.sns_project.fragment.UsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-import static com.example.sns_project.Util.isStorageUrl;
 import static com.example.sns_project.Util.showToast;
-import static com.example.sns_project.Util.storageUrlToName;
 
 
 /*
@@ -51,6 +37,7 @@ TODO 1. 채팅 프로필 이미지 변경시 storage 저장 통합 (o)
 public class MainActivity extends BasicActivity {
     private long backPressedTime; // 두번눌러서 앱종료
     private Toast backToast; // Toast value
+
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
     StorageReference storageRef;
@@ -59,13 +46,6 @@ public class MainActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // 여기부터 bottom navigation
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2,
-                new HomeFragment()).commit();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT); //화면 전환 금지 설정
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser(); //사용자가 로그인 되어있는지 확인
@@ -94,6 +74,38 @@ public class MainActivity extends BasicActivity {
         }
 
 
+        // 여기부터 bottom navigation
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2,
+                new HomeFragment()).commit();
+
+    }
+
+    // Action Bar 에서 서치(돋보기 아이콘, Search), 게시판(Bulletin Board) 기능 부분
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_option, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_search:
+                Intent i = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(i);
+                return true;
+
+            case R.id.menu_bulletin_board:
+                Toast.makeText(this, "Bulletin Board function", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // bottom navigation 에서 해당하는 fragment 호출 함수
@@ -111,7 +123,7 @@ public class MainActivity extends BasicActivity {
                         break;
 
                     case R.id.nav_chat:
-                        selectedFragment = new ChatFragment();
+                        selectedFragment = new ChatsFragment();
                         break;
 
                     case R.id.nav_profile:

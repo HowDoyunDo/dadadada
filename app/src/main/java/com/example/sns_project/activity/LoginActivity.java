@@ -72,17 +72,17 @@ public class LoginActivity extends BasicActivity implements  GoogleApiClient.OnC
                             } else {
                                 // 실패 했을 경우 UI
                                 if (task.getException() != null) {
-                                    showToast(LoginActivity.this, task.getException().toString());
+                                    showToast(LoginActivity.this, "이메일과 비밀번호를 확인해주세요.");
                                 }
                             }
                         });
             } else{
-               showToast(LoginActivity.this,"비밀번호를 입력해주세요.");
+                showToast(LoginActivity.this,"비밀번호를 입력해주세요.");
                 passwordFocus.requestFocus();
             }
         } else { //이메일과 비밀번호가 입력되지 않은 경우
-           showToast(LoginActivity.this,"이메일을 입력해주세요.");
-           emailFocus.requestFocus();
+            showToast(LoginActivity.this,"이메일을 입력해주세요.");
+            emailFocus.requestFocus();
         }
     }
 
