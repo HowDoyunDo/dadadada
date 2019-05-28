@@ -19,7 +19,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_detail);//
 
         title = (TextView) findViewById(R.id.title);
         detail = (TextView) findViewById(R.id.detail);
