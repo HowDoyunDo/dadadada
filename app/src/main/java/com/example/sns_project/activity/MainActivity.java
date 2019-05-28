@@ -87,24 +87,23 @@ public class MainActivity extends BasicActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_option, menu);
+        inflater.inflate(R.menu.menu_option, menu); // menu_option 을 선언해놓음
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_search:
-                Intent i = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(i);
+            case R.id.menu_search: // 돋보기 옵션을 눌렀을 경우
+                myStartActivity(SearchActivity.class);
                 return true;
 
-            case R.id.menu_bulletin_board:
-                Toast.makeText(this, "Bulletin Board function", Toast.LENGTH_SHORT).show();
+            case R.id.menu_bulletin_board: // 게시판 옵션을 눌렀을 경우
+                myStartActivity(GuideBoardActivity.class);
                 return true;
 
             default:
-                return super.onOptionsItemSelected(item); //a
+                return super.onOptionsItemSelected(item); //
         }
     }
 

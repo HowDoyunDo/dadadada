@@ -63,9 +63,8 @@
         <activity android:name=".activity.MapMarkerActivity"/>
         <activity android:name=".activity.KeywordActivity"/>
         <activity android:name=".activity.SearchActivity"/>
-        <activity android:name=".activity.GpsFestTourlistActivity">
-        </activity>
-
+        <activity android:name=".activity.GpsFestTourlistActivity"/>
+        <activity android:name=".activity.GuideBoardActivity"/>
 
         <service android:name="Notifications.MyFirebaseldService"
             android:enabled="true"
